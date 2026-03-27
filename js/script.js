@@ -98,13 +98,24 @@ const quizArray = [
       "Lese bøker",
     ],
     correctAnswer: "Være respektfull og hjelpsom",
+  },  {
+    id: 11,
+    question: "Se veldig nøye på denne videoen. Hvilken metode brukt i denne videoen er riktig?", URL: "../video/BleikerQuizzenVideo.mp4",
+    options: [
+      "A",
+      "B",
+      "C",
+      "None of the above",
+    ],
+    correctAnswer: "C",
   },
 ];
-
 window.addEventListener("DOMContentLoaded", () => {
   const quizQuestion = document.getElementById("quizQuestion");
   const options = document.querySelectorAll(".option");
   const nextButton = document.getElementById("nextButton");
+
+  const videoElement = document.getElementById("questionVideo");
 
   const leaderboardContainer = document.getElementById("leaderboardContainer");
   const namePrompt = document.getElementById("namePrompt");
@@ -121,6 +132,15 @@ window.addEventListener("DOMContentLoaded", () => {
   function loadQuiz() {
     const question = quizArray[currentQuestionIndex];
     quizQuestion.textContent = question.question;
+
+    // ✅ HANDLE VIDEO QUESTION
+    if (question.URL) {
+      videoElement.style.display = "block";
+      videoElement.src = question.URL;
+      videoElement.load();
+    } else {
+      videoElement.style.display = "none";
+    }
 
     options.forEach((btn, index) => {
       btn.textContent = question.options[index];
@@ -154,33 +174,39 @@ window.addEventListener("DOMContentLoaded", () => {
         }
       });
 
-      if (selectedOption.textContent === currentQuestion.correctAnswer) score++;
+      if (selectedOption.textContent === currentQuestion.correctAnswer) {
+        score++;
+      }
     } else {
       currentQuestionIndex++;
+
       if (currentQuestionIndex < quizArray.length) {
         loadQuiz();
       } else {
         quizQuestion.textContent = `Ferdig! Din score: ${score}/${quizArray.length}`;
         document.querySelector(".quizOptions").style.display = "none";
         nextButton.style.display = "none";
+        videoElement.style.display = "none";
         leaderboardContainer.style.display = "block";
       }
     }
   };
 
-  // Leaderboard submission
   submitNameBtn.onclick = () => {
     const name = playerNameInput.value.trim();
     if (!name) return alert("Skriv inn et navn!");
 
     let storedScores = JSON.parse(localStorage.getItem("highscores") || "[]");
+
     storedScores.push({ name: name, score: score });
     storedScores.sort((a, b) => b.score - a.score);
     storedScores = storedScores.slice(0, 5);
+
     localStorage.setItem("highscores", JSON.stringify(storedScores));
 
     namePrompt.style.display = "none";
     highscoresDiv.style.display = "block";
+
     highscoreList.innerHTML = "";
     storedScores.forEach((entry) => {
       const li = document.createElement("li");
@@ -191,5 +217,3 @@ window.addEventListener("DOMContentLoaded", () => {
 
   loadQuiz();
 });
-
-
