@@ -138,6 +138,7 @@ window.addEventListener("DOMContentLoaded", () => {
       videoElement.style.display = "block";
       videoElement.src = question.URL;
       videoElement.load();
+      document.getElementById("option4").style.display = "none"; // Skjul 4. knapp for video-spørsmål
     } else {
       videoElement.style.display = "none";
     }
