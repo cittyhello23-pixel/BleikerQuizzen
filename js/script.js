@@ -133,12 +133,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const question = quizArray[currentQuestionIndex];
     quizQuestion.textContent = question.question;
 
-    // ✅ HANDLE VIDEO QUESTION
     if (question.URL) {
       videoElement.style.display = "block";
       videoElement.src = question.URL;
       videoElement.load();
-      document.getElementById("option4").style.display = "none"; // Skjul 4. knapp for video-spørsmål
+      document.getElementById("option4").style.display = "none"; 
     } else {
       videoElement.style.display = "none";
     }
